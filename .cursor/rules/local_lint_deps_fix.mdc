@@ -1,0 +1,34 @@
+---
+description: 
+globs: 
+---
+ # Lint Dependencies Fix Rule
+
+## Description
+This rule automatically suggests running the dependency linter fix command when there are forbidden source dependency errors.
+
+## When to use
+When there are linter errors containing "forbidden source dependency" in the error message.
+
+## Example error messages
+```
+forbidden source dependency src/pages/admin_feature_control/experiment_view/version_view/enrolments -> src/ui/base/typography ../../../../../ui/base/typography
+```
+
+## Solution
+Run the dependency linter fix command for the affected directory:
+
+```bash
+pnpm lint:deps:fix <directory>
+```
+
+Where `<directory>` is the root directory containing the file with the dependency error (typically the highest common directory path).
+
+## Example
+If you have a file at `src/pages/admin_feature_control/experiment_view/version_view/enrolments/SampleComponentFile.tsx` with a forbidden source dependency error, run:
+
+```bash
+pnpm lint:deps:fix src/pages/admin_feature_control
+```
+
+This will fix dependency issues for all files under the `admin_feature_control` directory.

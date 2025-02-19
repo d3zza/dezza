@@ -1,0 +1,69 @@
+---
+description: 
+globs: 
+---
+ name = "Import Design System Components"
+description = "Automatically adds imports for design system components when they are used in code"
+language = "typescript"
+
+[components]
+Box = "ui/base/box/box"
+Button = "ui/base/button/button"
+CircleButton = "ui/base/button/button"
+BasicButton = "ui/base/button/button"
+Text = "ui/base/typography/typography"
+Title = "ui/base/typography/typography"
+InheritColor = "ui/base/typography/typography"
+Rows = "ui/base/layout/layout"
+Columns = "ui/base/layout/layout"
+Column = "ui/base/layout/layout"
+Inline = "ui/base/layout/layout"
+Spacer = "ui/base/layout/layout"
+Container = "ui/base/layout/layout"
+Grid = "ui/base/layout/layout"
+Bleed = "ui/base/layout/layout"
+Alert = "ui/base/alert/alert"
+Form = "ui/base/form/base_form/base_form"
+FormField = "ui/base/form/form_field/form_field"
+TextInput = "ui/base/form/text_input/text_input"
+NumberInput = "ui/base/form/number_input/number_input"
+Switch = "ui/base/form/switch/switch"
+Label = "ui/base/form/label/label"
+Carousel = "ui/base/carousel/carousel"
+MessageDialog = "ui/base/dialog/message_dialog/message_dialog"
+Popover = "ui/base/surface/popover/popover"
+Scrollable = "ui/base/scrollable/scrollable"
+
+[rule]
+pattern = '''
+(?<!\bimport\s+\{[^}]*\b)(?<component>[A-Z][a-zA-Z]+)(?=\s*[=:]\s*(?:\([^)]*\)\s*=>|\{[^}]*\})|<\k<component>(?:\s+[^>]*)?/?>)
+'''
+message = "Component '${component}' is used but not imported"
+
+[rule.fix]
+insert_position = "start_of_imports"
+template = '''import { ${component} } from '${components[component]}';
+'''
+
+[examples]
+input = '''
+const MyComponent = () => (
+  <Box>
+    <Button>Click me</Button>
+    <Text>Hello world</Text>
+  </Box>
+);
+'''
+
+output = '''
+import { Box } from 'ui/base/box/box';
+import { Button } from 'ui/base/button/button';
+import { Text } from 'ui/base/typography/typography';
+
+const MyComponent = () => (
+  <Box>
+    <Button>Click me</Button>
+    <Text>Hello world</Text>
+  </Box>
+);
+'''
